@@ -44,7 +44,7 @@
             );
 
             $puzzle = $this->fetchPuzzle($level);
-            if (! $puzzle) $puzzle = $this->getBackupPuzzle($level);
+            if (! $puzzle) return $this->getBackupResponse($level);
 
             $content = array(
                 'board' => $puzzle['board'],
@@ -116,13 +116,12 @@
         /**
          * If the site is down and we can't get a puzzle, load a backup puzzle
          * @param integer $level
-         * @return array
+         * @return Response
          */
-        protected function getBackupPuzzle($level)
+        protected function getBackupResponse($level)
         {
-            $json = file_get_contents(__DIR__ . "/backup/$level.ser");
-            $puzzle = json_decode($json, true);
-            return $puzzle;
+            $puzzle = @unserialize(file_get_contents(__DIR__ . "/backup/$level.ser"));
+            return $puzzle['response'];
         }
 
 
