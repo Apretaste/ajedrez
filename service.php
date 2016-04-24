@@ -14,7 +14,6 @@
 
         /**
          * Function executed when the service is called
-         *
          * @param Request $request
          * @return Response
          * */
@@ -73,7 +72,7 @@
          * Retrieve daily puzzle from the remote site
          * @param integer $level (0 = easy, 1 = medium, 2 = hard)
          * @return array
-         * */
+         */
         protected function fetchPuzzle($level)
         {
             $client = new Client();
@@ -129,7 +128,6 @@
 
         /**
          * Returns an HTML representation of the board with the given FEN position
-         *
          * @param string $fen
          * @param integer $turn
          * @param array $firstMove
@@ -195,7 +193,6 @@
 
         /**
          * Converts a board index (0-63) to algebraic coordinate (a1-h8)
-         *
          * @param integer $i
          * @return string
          */
