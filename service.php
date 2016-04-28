@@ -167,7 +167,7 @@
             $html = '<table id="board">';
             for ($i = 0; $i < 8; $i++) {
                 $ii = $turn == self::WHITE ? 8 - $i : $i + 1;
-                $html .= "<tr style='vertical-align: bottom;'><td class='num'>$ii</td></td>";
+                $html .= "<tr style='vertical-align: bottom;'><td class='num'>$ii</td>";
 
                 for ($j = 0; $j < 8; $j++) {
                     $pos = $turn == self::WHITE ? (7 - $i) * 8 + $j : $i * 8 + (7 - $j);
