@@ -164,25 +164,25 @@
             $board[$firstMove[1]] = $board[$firstMove[0]];
             $board[$firstMove[0]] = self::NONE;
 
-            $html = '<table id="board">';
+            $html = '<table id="board" style="text-align:center;border-spacing:0;font-family:\'Arial Unicode MS\';border-collapse:collapse;border-color:#888888;border-width:1pt;">';
             for ($i = 0; $i < 8; $i++) {
                 $ii = $turn == self::WHITE ? 8 - $i : $i + 1;
-                $html .= "<tr style='vertical-align: bottom;'><td class='num'>$ii</td>";
+                $html .= "<tr style='vertical-align:bottom;'><td style='vertical-align:middle;width:12pt;font-size:9pt;'>$ii</td>";
 
                 for ($j = 0; $j < 8; $j++) {
                     $pos = $turn == self::WHITE ? (7 - $i) * 8 + $j : $i * 8 + (7 - $j);
-                    $color = ($i + $j) % 2 == 0 ? 'light' : 'dark';
+                    $color = ($i + $j) % 2 == 0 ? '#FFFFFF' : '#DDDDDD';
                     $piece = $board[$pos] === self::NONE ? self::BLANK : $pieceMap[$board[$pos]];
 
-                    $html .= "<td class='square $color'>$piece</td>";
+                    $html .= "<td style='width:38pt;height:38pt;font-size:28pt;padding:0;border-collapse:collapse;border-style:solid;border-width:1pt 0 0 0;border-color:#888888;vertical-align:middle;background-color:$color;'>$piece</td>";
                 }
                 $html .= '</tr>';
             }
 
-            $html .= '<tr><td>&nbsp;</td>';
+            $html .= '<tr style="vertical-align:bottom;"><td>&nbsp;</td>';
             for ($i = 0; $i < 8; $i++) {
                 $ii = $turn == self::WHITE ? $i : 7 - $i;
-                $html .= '<td class="num">' . chr(97 + $ii) . '</td>';
+                $html .= '<td style="vertical-align:middle;width:12pt;font-size:9pt;">' . chr(97 + $ii) . '</td>';
             }
             $html .= '</tr></table>';
 
