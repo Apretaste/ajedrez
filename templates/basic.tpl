@@ -12,7 +12,8 @@
     }
     #board td.num {
         vertical-align: middle;
-        width: 12pt;
+        width: 12pt;<h1>Ajedrez</h1>
+        
         font-size: 9pt;
     }
     #board td.square {
@@ -36,14 +37,19 @@
 
 <center>
 
-<h1>Ajedrez</h1>
-
-<p>Juegan las {$turnStr}. Encuentre la mejor continuaci&oacute;n.</p>
+<p>Juegan las {$turnStr}. Encuentre la mejor jugada.</p>
 
 {$board}
 
-<p>Nivel: {$level}</p>
+<p>Dificultad: {$level}</p>
 
-<p>Seleccione este texto para descubrir la soluci&oacute;n: [<span style="color: white">{$solution}</span>]</p>
+<p>Seleccione aqu&iacute; para ver la soluci&oacute;n: [<font color="white">{$solution}</font>]</p>
+
+{space10}
+
+<p>Otras dificultades:</p>
+{if $level ne "Fácil"}{button href="AJEDREZ FACIL" caption="F&aacute;cil"}{/if}
+{if $level ne "Intermedio"}{button href="AJEDREZ" caption="Mediano"}{/if}
+{if $level ne "Difícil"}{button href="AJEDREZ DIFICIL" caption="D&iacute;ficil"}{/if}
 
 </center>

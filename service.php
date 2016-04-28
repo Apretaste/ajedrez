@@ -54,7 +54,7 @@
             );
 
             $response = new Response();
-            $response->setResponseSubject("Problema de ajedrez");
+            $response->setResponseSubject("Problema de ajedrez del dia");
             $response->createFromTemplate("basic.tpl", $content);
 
             // Cache response

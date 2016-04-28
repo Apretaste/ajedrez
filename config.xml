@@ -1,6 +1,6 @@
 <service>
 	<serviceName>ajedrez</serviceName>
-	<serviceDescription>Muestra un nuevo problema de ajedrez cada día</serviceDescription>
+	<serviceDescription><![CDATA[Muestra un nuevo problema de ajedrez cada d&iacute;a]]></serviceDescription>
 	<creatorEmail>rodtejedor@gmail.com</creatorEmail>
 	<serviceCategory>ocio</serviceCategory>
 	<serviceUsage>
@@ -11,9 +11,9 @@
 			Para: {APRETASTE_EMAIL}
 			Asunto: ajedrez
 
-			Si desea, puede a&ntilde;adir la palabra "f&aacute;cil" o "dif&iacute;cil" para controlar la dificultad del problema, por ejemplo:
+			Recibir&aacute; un email con el problema de ajedrez del d&iacute;a. Si desea, puede a&ntilde;adir la palabra "facil" o "dificil" para controlar la dificultad del problema, por ejemplo:
 
-			Asunto: ajedrez f&aacute;cil
+			Asunto: ajedrez facil
 		]]>
 	</serviceUsage>
 </service>
