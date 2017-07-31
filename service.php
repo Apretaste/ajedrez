@@ -19,15 +19,10 @@ class Ajedrez extends Service
 	public function _main(Request $request)
 	{
 		// Get requested difficulty level
-		if (empty($request->query)) {
-			$level = self::MEDIUM;
-		} elseif (stripos($request->query, 'f') === 0) {
-			$level = self::EASY;
-		} elseif (stripos($request->query, 'd') === 0) {
-			$level = self::HARD;
-		} else {
-			$level = self::MEDIUM;
-		}
+		if (empty($request->query)) $level = self::MEDIUM;
+		elseif (stripos($request->query, 'f') === 0) $level = self::EASY;
+		elseif (stripos($request->query, 'd') === 0) $level = self::HARD;
+		else $level = self::MEDIUM;
 
 		// Return cached response if fetched today
 		$today = mktime(0, 0, 0);
@@ -65,7 +60,6 @@ class Ajedrez extends Service
 
 		return $response;
 	}
-
 
 	/**
 	 * Retrieve daily puzzle from the remote site
@@ -111,7 +105,6 @@ class Ajedrez extends Service
 		return $puzzle;
 	}
 
-
 	/**
 	 * If the site is down and we can't get a puzzle, load a backup puzzle
 	 * @param integer $level
@@ -123,7 +116,6 @@ class Ajedrez extends Service
 		$puzzle = json_decode($json, true);
 		return $puzzle;
 	}
-
 
 	/**
 	 * Returns an HTML representation of the board with the given FEN position
@@ -164,17 +156,17 @@ class Ajedrez extends Service
 		$board[$firstMove[1]] = $board[$firstMove[0]];
 		$board[$firstMove[0]] = self::NONE;
 
-		$html = '<table id="board">';
+		$html = '<table id="board" border="1" cellpadding="3" cellspacing="0">';
 		for ($i = 0; $i < 8; $i++) {
 			$ii = $turn == self::WHITE ? 8 - $i : $i + 1;
-			$html .= "<tr style='vertical-align: bottom;'><td class='num'>$ii</td></td>";
+			$html .= "<tr><td width='20' align='center'><small>$ii</small></td></td>";
 
 			for ($j = 0; $j < 8; $j++) {
 				$pos = $turn == self::WHITE ? (7 - $i) * 8 + $j : $i * 8 + (7 - $j);
-				$color = ($i + $j) % 2 == 0 ? 'light' : 'dark';
+				$color = ($i + $j) % 2 == 0 ? 'white' : '#C1C1C1';
 				$piece = $board[$pos] === self::NONE ? self::BLANK : $pieceMap[$board[$pos]];
 
-				$html .= "<td class='square $color'>$piece</td>";
+				$html .= "<td width='20' heigth='20' bgcolor='$color' align='center' valign='middle'>$piece</td>";
 			}
 			$html .= '</tr>';
 		}
@@ -182,7 +174,7 @@ class Ajedrez extends Service
 		$html .= '<tr><td>&nbsp;</td>';
 		for ($i = 0; $i < 8; $i++) {
 			$ii = $turn == self::WHITE ? $i : 7 - $i;
-			$html .= '<td class="num">' . chr(97 + $ii) . '</td>';
+			$html .= '<td align="center"><small>' . chr(97 + $ii) . '</small></td>';
 		}
 		$html .= '</tr></table>';
 
