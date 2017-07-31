@@ -1,6 +1,6 @@
 <service>
 	<serviceName>ajedrez</serviceName>
-	<serviceDescription>Muestra un nuevo problema de ajedrez cada día</serviceDescription>
+	<serviceDescription>Muestra un nuevo problema de ajedrez cada dia</serviceDescription>
 	<creatorEmail>rodtejedor@gmail.com</creatorEmail>
 	<serviceCategory>ocio</serviceCategory>
 	<serviceUsage>
