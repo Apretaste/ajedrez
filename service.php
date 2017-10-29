@@ -48,6 +48,7 @@ class Ajedrez extends Service
 		);
 
 		$response = new Response();
+		$response->setCache("day");
 		$response->setResponseSubject("Problema de ajedrez");
 		$response->createFromTemplate("basic.tpl", $content);
 
@@ -74,7 +75,7 @@ class Ajedrez extends Service
 
 		$data = $response->getBody()->__toString();
 
-		if (! $data) return null;
+		if ( ! $data) return null;
 
 		$puzzle = array();
 
