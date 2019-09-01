@@ -5,190 +5,209 @@ use GuzzleHttp\Client;
 /**
  * Retrieves the tactics problem of the day from Shredder website.
  */
-class Ajedrez extends Service
+class AjedrezService extends ApretasteService
 {
-	const NONE = 0, WHITE = 1, BLACK = -1;
-	const EASY = 0, MEDIUM = 1, HARD = 2;
-	const BLANK = '&nbsp;';
 
-	/**
-	 * Function executed when the service is called
-	 * @param Request $request
-	 * @return Response
-	 * */
-	public function _main(Request $request)
-	{
-		// Get requested difficulty level
-		if (empty($request->query)) $level = self::MEDIUM;
-		elseif (stripos($request->query, 'f') === 0) $level = self::EASY;
-		elseif (stripos($request->query, 'd') === 0) $level = self::HARD;
-		else $level = self::MEDIUM;
+    const NONE = 0, WHITE = 1, BLACK = -1;
 
-		// Return cached response if fetched today
-		$today = mktime(0, 0, 0);
-		$cached = @unserialize(file_get_contents(__DIR__ . "/cache/$level.ser"));
-		if ($cached && $cached['date'] == $today) {
-			return $cached['response'];
-		}
+    const EASY = 0, MEDIUM = 1, HARD = 2;
 
-		$levelMap = array(
-			self::EASY => 'Fácil',
-			self::MEDIUM => 'Intermedio',
-			self::HARD => 'Difícil'
-		);
+    const BLANK = '&nbsp;';
 
-		$puzzle = $this->fetchPuzzle($level);
-		if (! $puzzle) $puzzle = $this->getBackupPuzzle($level);
+    /**
+     * Function executed when the service is called
+     */
+    public function _main()
+    {
+        // Get requested difficulty level
+        if (empty($this->request->input->data->query)) {
+            $level = self::MEDIUM;
+        } elseif (stripos($this->request->input->data->query, 'f') === 0) {
+            $level = self::EASY;
+        } elseif (stripos($this->request->input->data->query, 'd') === 0) {
+            $level = self::HARD;
+        } else {
+            $level = self::MEDIUM;
+        }
 
-		$content = array(
-			'board' => $puzzle['board'],
-			'solution' => $puzzle['solution'],
-			'level' => $levelMap[$level],
-			'turnStr' => $puzzle['turn'] == self::WHITE ? 'blancas' : 'negras'
-		);
+        // Return cached response if fetched today
+        $today = mktime(0, 0, 0);
+        $cached = @unserialize(file_get_contents(__DIR__."/cache/$level.ser"));
+        if ($cached && $cached['date'] == $today) {
+            return $cached['response'];
+        }
 
-		$response = new Response();
-		$response->setCache("day");
-		$response->setResponseSubject("Problema de ajedrez");
-		$response->createFromTemplate("basic.tpl", $content);
+        $levelMap = [
+            self::EASY   => 'Fácil',
+            self::MEDIUM => 'Intermedio',
+            self::HARD   => 'Difícil'
+        ];
 
-		// Cache response
-		$cache = array(
-			'date' => $today,
-			'response' => $response
-		);
-		file_put_contents(__DIR__ . "/cache/$level.ser", serialize($cache));
+        $puzzle = $this->fetchPuzzle($level);
+        if (!$puzzle) {
+            $puzzle = $this->getBackupPuzzle($level);
+        }
 
-		return $response;
-	}
+        $content = [
+            'board'    => $puzzle['board'],
+            'solution' => $puzzle['solution'],
+            'level'    => $levelMap[$level],
+            'turnStr'  => $puzzle['turn'] == self::WHITE ? 'blancas' : 'negras'
+        ];
 
-	/**
-	 * Retrieve daily puzzle from the remote site
-	 * @param integer $level (0 = easy, 1 = medium, 2 = hard)
-	 * @return array
-	 */
-	protected function fetchPuzzle($level)
-	{
-		$client = new Client();
-		$url = "http://www.shredderchess.com/online/playshredder/fetch.php?action=tacticsoftheday&day=0&level=" . strval($level);
-		$response = $client->get($url);
+        $this->response->setCache("day");
+        $this->response->setTemplate("basic.ejs", $content);
 
-		$data = $response->getBody()->__toString();
+        // Cache response
+        $cache = [
+            'date'     => $today,
+            'response' => $this->response
+        ];
 
-		if ( ! $data) return null;
+        file_put_contents(__DIR__."/cache/$level.ser", serialize($cache));
 
-		$puzzle = array();
+    }
 
-		// Parse position and create board
-		$data = substr($data, strpos($data, '|') + 1);
-		$data = explode(' ', $data);
+    /**
+     * Retrieve daily puzzle from the remote site
+     *
+     * @param integer $level (0 = easy, 1 = medium, 2 = hard)
+     *
+     * @return array
+     */
+    protected function fetchPuzzle($level)
+    {
+        $client = new Client();
+        $url = "http://www.shredderchess.com/online/playshredder/fetch.php?action=tacticsoftheday&day=0&level=".strval($level);
+        $response = $client->get($url);
 
-		$pos = $data[0];
-		$puzzle['turn'] = $data[1] == 'b' ? self::WHITE : self::BLACK;
-		for ($i = 0, $j = count($data); $i < $j; $i++) {
-			if (strpos($data[$i], '_') !== false) break;
-		}
-		$moves = array_slice($data, $i + 1);
+        $data = $this->response->getBody()->__toString();
 
-		$fm = explode('_', $data[$i]);
-		$firstMove = explode('-', $fm[1]);
+        if (!$data) {
+            return null;
+        }
 
-		$puzzle['board'] = $this->makeBoardHtml($pos, $puzzle['turn'], $firstMove);
+        $puzzle = [];
 
-		// Parse solution
-		$solution = '';
-		for ($i = 0, $j = count($moves); $i < $j; $i++) {
-			$arr = explode('-', $moves[$i]);
-			$solution .= $this->numToSq($arr[0]) . '-' . $this->numToSq($arr[1]) . ' ';
-		}
-		$puzzle['solution'] = rtrim($solution);
+        // Parse position and create board
+        $data = substr($data, strpos($data, '|') + 1);
+        $data = explode(' ', $data);
 
-		return $puzzle;
-	}
+        $pos = $data[0];
+        $puzzle['turn'] = $data[1] == 'b' ? self::WHITE : self::BLACK;
+        for ($i = 0, $j = count($data); $i < $j; $i++) {
+            if (strpos($data[$i], '_') !== false) {
+                break;
+            }
+        }
+        $moves = array_slice($data, $i + 1);
 
-	/**
-	 * If the site is down and we can't get a puzzle, load a backup puzzle
-	 * @param integer $level
-	 * @return array
-	 */
-	protected function getBackupPuzzle($level)
-	{
-		$json = file_get_contents(__DIR__ . "/backup/$level.ser");
-		$puzzle = json_decode($json, true);
-		return $puzzle;
-	}
+        $fm = explode('_', $data[$i]);
+        $firstMove = explode('-', $fm[1]);
 
-	/**
-	 * Returns an HTML representation of the board with the given FEN position
-	 * @param string $fen
-	 * @param integer $turn
-	 * @param array $firstMove
-	 * @return string
-	 */
-	private function makeBoardHtml ($fen, $turn, $firstMove)
-	{
-		$pieceMap = array(
-			'K' => "&#9812;",
-			'Q' => "&#9813;",
-			'R' => "&#9814;",
-			'B' => "&#9815;",
-			'N' => "&#9816;",
-			'P' => "&#9817;",
-			'k' => "&#9818;",
-			'q' => "&#9819;",
-			'r' => "&#9820;",
-			'b' => "&#9821;",
-			'n' => "&#9822;",
-			'p' => "&#9823;"
-		);
+        $puzzle['board'] = $this->makeBoardHtml($pos, $puzzle['turn'], $firstMove);
 
-		$board = array_pad(array(), 64, self::NONE);
-		for ($i = 0, $j = strlen($fen), $k = 56; $i < $j; $i++) {
-			if ($fen[$i] == '/') {
-				$k -= 16;
-			} elseif (is_numeric($fen[$i])) {
-				$k += intval($fen[$i]);
-			} else {
-				$board[$k++] = $fen[$i];
-			}
-		}
+        // Parse solution
+        $solution = '';
+        for ($i = 0, $j = count($moves); $i < $j; $i++) {
+            $arr = explode('-', $moves[$i]);
+            $solution .= $this->numToSq($arr[0]).'-'.$this->numToSq($arr[1]).' ';
+        }
+        $puzzle['solution'] = rtrim($solution);
 
-		// Make initial move
-		$board[$firstMove[1]] = $board[$firstMove[0]];
-		$board[$firstMove[0]] = self::NONE;
+        return $puzzle;
+    }
 
-		$html = '<table id="board" border="1" cellpadding="3" cellspacing="0">';
-		for ($i = 0; $i < 8; $i++) {
-			$ii = $turn == self::WHITE ? 8 - $i : $i + 1;
-			$html .= "<tr><td width='20' align='center'><small>$ii</small></td></td>";
+    /**
+     * If the site is down and we can't get a puzzle, load a backup puzzle
+     *
+     * @param integer $level
+     *
+     * @return array
+     */
+    protected function getBackupPuzzle($level)
+    {
+        $json = file_get_contents(__DIR__."/backup/$level.ser");
+        $puzzle = json_decode($json, true);
 
-			for ($j = 0; $j < 8; $j++) {
-				$pos = $turn == self::WHITE ? (7 - $i) * 8 + $j : $i * 8 + (7 - $j);
-				$color = ($i + $j) % 2 == 0 ? 'white' : '#C1C1C1';
-				$piece = $board[$pos] === self::NONE ? self::BLANK : $pieceMap[$board[$pos]];
+        return $puzzle;
+    }
 
-				$html .= "<td width='20' heigth='20' bgcolor='$color' align='center' valign='middle'>$piece</td>";
-			}
-			$html .= '</tr>';
-		}
+    /**
+     * Returns an HTML representation of the board with the given FEN position
+     *
+     * @param string  $fen
+     * @param integer $turn
+     * @param array   $firstMove
+     *
+     * @return string
+     */
+    private function makeBoardHtml($fen, $turn, $firstMove)
+    {
+        $pieceMap = [
+            'K' => "&#9812;",
+            'Q' => "&#9813;",
+            'R' => "&#9814;",
+            'B' => "&#9815;",
+            'N' => "&#9816;",
+            'P' => "&#9817;",
+            'k' => "&#9818;",
+            'q' => "&#9819;",
+            'r' => "&#9820;",
+            'b' => "&#9821;",
+            'n' => "&#9822;",
+            'p' => "&#9823;"
+        ];
 
-		$html .= '<tr><td>&nbsp;</td>';
-		for ($i = 0; $i < 8; $i++) {
-			$ii = $turn == self::WHITE ? $i : 7 - $i;
-			$html .= '<td align="center"><small>' . chr(97 + $ii) . '</small></td>';
-		}
-		$html .= '</tr></table>';
+        $board = array_pad([], 64, self::NONE);
+        for ($i = 0, $j = strlen($fen), $k = 56; $i < $j; $i++) {
+            if ($fen[$i] == '/') {
+                $k -= 16;
+            } elseif (is_numeric($fen[$i])) {
+                $k += intval($fen[$i]);
+            } else {
+                $board[$k++] = $fen[$i];
+            }
+        }
 
-		return $html;
-	}
+        // Make initial move
+        $board[$firstMove[1]] = $board[$firstMove[0]];
+        $board[$firstMove[0]] = self::NONE;
 
-	/**
-	 * Converts a board index (0-63) to algebraic coordinate (a1-h8)
-	 * @param integer $i
-	 * @return string
-	 */
-	protected function numToSq ($i)
-	{
-		return chr(97 + $i % 8) . (intval($i / 8) + 1);
-	}
+        $html = '<table id="board" border="1" cellpadding="3" cellspacing="0">';
+        for ($i = 0; $i < 8; $i++) {
+            $ii = $turn == self::WHITE ? 8 - $i : $i + 1;
+            $html .= "<tr><td width='20' align='center'><small>$ii</small></td></td>";
+
+            for ($j = 0; $j < 8; $j++) {
+                $pos = $turn == self::WHITE ? (7 - $i) * 8 + $j : $i * 8 + (7 - $j);
+                $color = ($i + $j) % 2 == 0 ? 'white' : '#C1C1C1';
+                $piece = $board[$pos] === self::NONE ? self::BLANK : $pieceMap[$board[$pos]];
+
+                $html .= "<td width='20' heigth='20' bgcolor='$color' align='center' valign='middle'>$piece</td>";
+            }
+            $html .= '</tr>';
+        }
+
+        $html .= '<tr><td>&nbsp;</td>';
+        for ($i = 0; $i < 8; $i++) {
+            $ii = $turn == self::WHITE ? $i : 7 - $i;
+            $html .= '<td align="center"><small>'.chr(97 + $ii).'</small></td>';
+        }
+        $html .= '</tr></table>';
+
+        return $html;
+    }
+
+    /**
+     * Converts a board index (0-63) to algebraic coordinate (a1-h8)
+     *
+     * @param integer $i
+     *
+     * @return string
+     */
+    protected function numToSq($i)
+    {
+        return chr(97 + $i % 8).(intval($i / 8) + 1);
+    }
 }
