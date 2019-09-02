@@ -81,7 +81,7 @@ class AjedrezService extends ApretasteService
         $url = "http://www.shredderchess.com/online/playshredder/fetch.php?action=tacticsoftheday&day=0&level=".strval($level);
         $response = $client->get($url);
 
-        $data = $this->response->getBody()->__toString();
+        $data = $response->getBody()->__toString();
 
         if (!$data) {
             return null;
@@ -94,7 +94,7 @@ class AjedrezService extends ApretasteService
         $data = explode(' ', $data);
 
         $pos = $data[0];
-        $puzzle['turn'] = $data[1] == 'b' ? self::WHITE : self::BLACK;
+        $puzzle['turn'] = $data[1] === 'b' ? self::WHITE : self::BLACK;
         for ($i = 0, $j = count($data); $i < $j; $i++) {
             if (strpos($data[$i], '_') !== false) {
                 break;
