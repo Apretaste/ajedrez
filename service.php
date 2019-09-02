@@ -31,12 +31,12 @@ class AjedrezService extends ApretasteService
         }
 
         // Return cached response if fetched today
-       /* $today = mktime(0, 0, 0);
-        $cached = @unserialize(file_get_contents(__DIR__."/cache/$level.ser"));
-        if ($cached && $cached['date'] == $today) {
-            return $cached['response'];
-        }
-*/
+        $today = mktime(0, 0, 0);
+        /* $cached = @unserialize(file_get_contents(__DIR__."/cache/$level.ser"));
+         if ($cached && $cached['date'] == $today) {
+             return $cached['response'];
+         }
+ */
         $levelMap = [
             self::EASY   => 'Fácil',
             self::MEDIUM => 'Intermedio',
