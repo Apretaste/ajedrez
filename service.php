@@ -31,12 +31,12 @@ class AjedrezService extends ApretasteService
         }
 
         // Return cached response if fetched today
-        $today = mktime(0, 0, 0);
+       /* $today = mktime(0, 0, 0);
         $cached = @unserialize(file_get_contents(__DIR__."/cache/$level.ser"));
         if ($cached && $cached['date'] == $today) {
             return $cached['response'];
         }
-
+*/
         $levelMap = [
             self::EASY   => 'Fácil',
             self::MEDIUM => 'Intermedio',
@@ -208,6 +208,6 @@ class AjedrezService extends ApretasteService
      */
     protected function numToSq($i)
     {
-        return chr(97 + $i % 8).(intval($i / 8) + 1);
+        return chr(97 + $i % 8).((int)($i / 8) + 1);
     }
 }
