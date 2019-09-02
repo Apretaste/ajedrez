@@ -56,6 +56,7 @@ class AjedrezService extends ApretasteService
         ];
 
         $this->response->setCache("day");
+        $this->response->setLayout('ajedrez.ejs');
         $this->response->setTemplate("basic.ejs", $content);
 
         // Cache response
