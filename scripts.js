@@ -38,7 +38,7 @@ $(function () {
           fs.removeClass('blink_me');
           fe.html(fs.html());
           fs.html('');
-          fs.css('border', '2px solid ' + colors[fritz.step]);
+          fs.css('background', colors[fritz.step]);
           fe.css('background', colors[fritz.step]);
 
           var sol = $("#solution");
