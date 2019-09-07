@@ -41,6 +41,7 @@ $(function(){
         }
       } else {
         $("#" +  fritz.start).removeClass('blink_me');
+        showToast('Mal !!');
         fritz.start = null;
       }
     }
