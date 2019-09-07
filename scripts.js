@@ -35,6 +35,7 @@ $(function(){
 
           fs.removeClass('blink_me');
           fe.html(fs.html());
+          fs.html('');
           fe.css('background', 'green');
 
           fritz.start = null;
