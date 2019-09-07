@@ -51,7 +51,7 @@ $(function () {
           fritz.start = null;
           fritz.end = null;
 
-          if (fritz.step > solutionData.length) {
+          if (fritz.step >= solutionData.length) {
             showToast('Fin de la partida. Felicitaciones!');
           }
           else {
