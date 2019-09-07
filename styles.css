@@ -1,5 +1,8 @@
 td, th {
   text-align: center;
+  font-size: 2rem;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 .blink_me {
