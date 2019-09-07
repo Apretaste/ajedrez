@@ -26,7 +26,7 @@ $(function () {
         //$(this).addClass('blink_me');
 
         $(this).addClass('btn-floating');
-        $(this).addClass('btn-pulse');
+        $(this).addClass('pulse');
       }
       else {
         fritz.end = id;
@@ -38,7 +38,7 @@ $(function () {
 
           //fs.removeClass('blink_me');
           fs.removeClass('btn-floating');
-          fs.removeClass('btn-pulse');
+          fs.removeClass('pulse');
 
           fe.html(fs.html());
           fs.html('');
@@ -66,7 +66,7 @@ $(function () {
         else {
           //$("#" + fritz.start).removeClass('blink_me');
           fs.removeClass('btn-floating');
-          fs.removeClass('btn-pulse');
+          fs.removeClass('pulse');
           showToast('Mal !!');
           fritz.start = null;
         }
