@@ -3,6 +3,7 @@ td, th {
   font-size: 2rem;
   padding-top: 0px;
   padding-bottom: 0px;
+  min-width: 2.5rem;
 }
 
 .blink_me {
