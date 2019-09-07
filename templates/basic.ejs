@@ -1,13 +1,7 @@
-
 <div class="row">
-	<div class="col s12 center">
-	<h1>Problemas de Ajedrez</h1>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col s12 center">
-	<p>Juegan las <%= turnStr %>. Encuentre la mejor jugada.</p>
+	<div class="col s12">
+	<h1>Juegan las <%= turnStr %>. Encuentre la mejor jugada.</h1>
+	<p>Dificultad: <b><%= level %></p></p>
 	</div>
 </div>
 
@@ -19,27 +13,29 @@
 
 <div class="row">
 	<div class="col s12 ">
-	<p>Dificultad: <%= level %></p>
+
 	</div>
 </div>
 
 <div class="row">
 	<div class="col s12 ">
-	<p>Seleccione abajo para ver la soluci&oacute;n: <br/>[<font color="white"><%= solution %></font>]</p>
+	<p>Seleccione abajo para ver la soluci&oacute;n: <br />[<font color="white"><%= solution %></font>]</p>
 	</div>
 </div>
 
-<div class="row">
-	<div class="col s12">
-	<p>Otras dificultades:</p>
+<div class="fixed-action-btn">
+	<a class="btn-floating btn-large green">
+		<i class="large material-icons">border_clear</i>
+	</a>
+	<ul>
 		<% if (level !== "Fácil") { %>
-			<a class="btn" href="#!" onclick="apretaste.send({command: 'AJEDREZ', data: {query: 'FACIL'}});">F&aacute;cil </a>
+		  <li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: 'FACIL'}});"><i class="material-icons left">border_horizontal</i>F&aacute;cil</a></li>
 		<% } %>
 		<% if (level !== "Intermedio") { %>
-			<a class="btn" href="#!" onclick="apretaste.send({command: 'AJEDREZ', data: {query: ''}});">Mediano</a>
+		  <li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: ''}});"><i class="material-icons left">border_outer</i>Medio</a></li>
 		<% } %>
 		<% if (level !== "Difícil") { %>
-			<a class="btn" href="#!" onclick="apretaste.send({command: 'AJEDREZ', data: {query: 'DIFICIL'}});">D&iacute;ficil</a>
+			<li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: 'DIFICIL'}});"><i class="material-icons left">border_all</i>Dif&iacute;cil&eacute;lite</a>
 		<% } %>
-	</div>
+	</ul>
 </div>

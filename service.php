@@ -49,10 +49,12 @@ class AjedrezService extends ApretasteService
         }
 
         $content = [
-            'board'    => $puzzle['board'],
-            'solution' => $puzzle['solution'],
-            'level'    => $levelMap[$level],
-            'turnStr'  => $puzzle['turn'] == self::WHITE ? 'blancas' : 'negras'
+            'board'        => $puzzle['board'],
+            'solution'     => $puzzle['solution'],
+            'solutionData' => $puzzle['solutionData'],
+            'level'        => $levelMap[$level],
+            'turnStr'      => $puzzle['turn'] == self::WHITE ? 'blancas' : 'negras'
+
         ];
 
         $this->response->setCache("day");
@@ -110,10 +112,19 @@ class AjedrezService extends ApretasteService
 
         // Parse solution
         $solution = '';
+        $puzzle['solutionData'] = [];
         for ($i = 0, $j = count($moves); $i < $j; $i++) {
             $arr = explode('-', $moves[$i]);
-            $solution .= $this->numToSq($arr[0]).'-'.$this->numToSq($arr[1]).' ';
+            $start = $this->numToSq($arr[0]);
+            $end = $this->numToSq($arr[1]);
+            $ss = $start.'-'.$end.' ';
+            $solution .= $ss;
+            $puzzle['solutionData'][] = [
+                'start' => $start,
+                'end'   => $end
+            ];
         }
+
         $puzzle['solution'] = rtrim($solution);
 
         return $puzzle;
@@ -178,14 +189,15 @@ class AjedrezService extends ApretasteService
         $html = '<table id="board" border="1" cellpadding="3" cellspacing="0">';
         for ($i = 0; $i < 8; $i++) {
             $ii = $turn == self::WHITE ? 8 - $i : $i + 1;
-            $html .= "<tr><td width='20' align='center'><small>$ii</small></td></td>";
+            $html .= "<tr><td width=\"20\" align=\"center\"><small>$ii</small></td></td>";
 
             for ($j = 0; $j < 8; $j++) {
+                $jj = $turn == self::WHITE ? $j : 7 - $j;
+                $letter = chr(97 + $jj);
                 $pos = $turn == self::WHITE ? (7 - $i) * 8 + $j : $i * 8 + (7 - $j);
                 $color = ($i + $j) % 2 == 0 ? 'white' : '#C1C1C1';
                 $piece = $board[$pos] === self::NONE ? self::BLANK : $pieceMap[$board[$pos]];
-
-                $html .= "<td width='20' heigth='20' bgcolor='$color' align='center' valign='middle'>$piece</td>";
+                $html .= "<td class=\"fritz-cell\" data-id=\"$letter{$ii}\" width=\"20\" heigth=\"20\" bgcolor=\"$color\" align=\"center\" valign=\"middle\">$piece</td>";
             }
             $html .= '</tr>';
         }
