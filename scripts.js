@@ -59,7 +59,7 @@ $(function () {
           fritz.end = null;
 
           if (fritz.step >= solutionData.length) {
-            showToast('Fin de la partida. Felicitaciones!');
+            showToast('Terminaste. Felicitaciones!');
           }
           else {
             showToast('Bien!!!');
