@@ -4,6 +4,9 @@ function showToast(text) {
   });
 }
 
+var colors = ['#e0f2f1', '#b2dfdb', '#80cbc4', '#4db6ac', '#26a69a', '#009688'];
+var scolors = ['teal lighten-5', 'teal lighten-4', 'teal lighten-3', 'teal lighten-2', 'teal lighten-1', 'teal'];
+
 var fritz = {
   step: 0,
   start: null,
@@ -35,7 +38,15 @@ $(function () {
           fs.removeClass('blink_me');
           fe.html(fs.html());
           fs.html('');
-          fe.css('background', 'green');
+          fe.css('background', colors[fritz.step]);
+
+          var sol = $("#solution");
+
+          if (fritz.step === 1) {
+            sol.html("");
+          }
+
+          sol.html(sol.html() + " <span class=\"badge " + scolors[fritz.step] + "\">" + fritz.start + "-" + fritz.end + "</span>");
 
           fritz.start = null;
           fritz.end = null;
