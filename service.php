@@ -197,7 +197,7 @@ class AjedrezService extends ApretasteService
                 $pos = $turn == self::WHITE ? (7 - $i) * 8 + $j : $i * 8 + (7 - $j);
                 $color = ($i + $j) % 2 == 0 ? 'white' : '#C1C1C1';
                 $piece = $board[$pos] === self::NONE ? self::BLANK : $pieceMap[$board[$pos]];
-                $html .= "<td class=\"fritz-cell\" data-id=\"$letter{$ii}\" width=\"20\" heigth=\"20\" bgcolor=\"$color\" align=\"center\" valign=\"middle\">$piece</td>";
+                $html .= "<td class=\"fritz-cell\" id=\"$letter{$ii}\" width=\"20\" heigth=\"20\" bgcolor=\"$color\" align=\"center\" valign=\"middle\">$piece</td>";
             }
             $html .= '</tr>';
         }
