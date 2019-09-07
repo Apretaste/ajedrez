@@ -22,11 +22,13 @@ $(function () {
     if (fritz.step < solutionData.length) {
       var id = $(this).attr('id');
       if (fritz.start === null) {
-        fritz.start = id;
-        //$(this).addClass('blink_me');
+        if ( $(this).html() !== '') {
+          fritz.start = id;
+          //$(this).addClass('blink_me');
 
-        $(this).addClass('btn-floating');
-        $(this).addClass('pulse');
+          $(this).addClass('btn-floating');
+          $(this).addClass('pulse');
+        }
       }
       else {
         fritz.end = id;
