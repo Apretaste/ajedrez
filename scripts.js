@@ -22,7 +22,7 @@ $(function () {
     if (fritz.step < solutionData.length) {
       var id = $(this).attr('id');
       if (fritz.start === null) {
-        if ( $(this).html() !== '') {
+        if ( $(this).html().replace('&nbsp;','') !== '') {
           fritz.start = id;
           //$(this).addClass('blink_me');
 
