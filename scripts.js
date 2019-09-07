@@ -46,7 +46,7 @@ $(function () {
             sol.html("");
           }
 
-          sol.html(sol.html() + " <span class=\"badge " + scolors[fritz.step] + "\">" + fritz.start + "-" + fritz.end + "</span>");
+          sol.html(sol.html() + " <span class=\"left badge " + scolors[fritz.step] + "\">" + fritz.start + "-" + fritz.end + "</span>");
 
           fritz.start = null;
           fritz.end = null;
@@ -65,5 +65,10 @@ $(function () {
         }
       }
     }
+  });
+
+  $('.fixed-action-btn').floatingActionButton({
+    direction: 'top',
+    hoverEnabled: false
   });
 });
