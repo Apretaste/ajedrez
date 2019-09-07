@@ -4,8 +4,9 @@ function showToast(text) {
   });
 }
 
-var colors = ['#e0f2f1', '#b2dfdb', '#80cbc4', '#4db6ac', '#26a69a', '#009688'];
-var scolors = ['teal lighten-5', 'teal lighten-4', 'teal lighten-3', 'teal lighten-2', 'teal lighten-1', 'teal'];
+var colors = ['#f1f8e9', '#dcedc8', '#c5e1a5', '#aed581', '#9ccc65', '#8bc34a'];
+var scolors = ['light-green lighten-5', 'light-green lighten-4', 'light-green lighten-3',
+              'light-green lighten-2', 'light-green lighten-1', 'light-green'];
 
 var fritz = {
   step: 0,
