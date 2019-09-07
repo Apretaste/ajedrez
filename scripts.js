@@ -30,10 +30,8 @@ $(function () {
       }
       else {
         fritz.end = id;
+        var fs = $("#" + fritz.start);
         if (fritz.checkStep()) {
-
-
-          var fs = $("#" + fritz.start);
           var fe = $("#" + fritz.end);
 
           fritz.step++;
@@ -66,7 +64,9 @@ $(function () {
           }
         }
         else {
-          $("#" + fritz.start).removeClass('blink_me');
+          //$("#" + fritz.start).removeClass('blink_me');
+          fs.removeClass('btn-floating');
+          fs.removeClass('btn-pulse');
           showToast('Mal !!');
           fritz.start = null;
         }
