@@ -23,7 +23,10 @@ $(function () {
       var id = $(this).attr('id');
       if (fritz.start === null) {
         fritz.start = id;
-        $(this).addClass('blink_me');
+        //$(this).addClass('blink_me');
+
+        $(this).addClass('btn-floating');
+        $(this).addClass('btn-pulse');
       }
       else {
         fritz.end = id;
@@ -35,7 +38,10 @@ $(function () {
 
           fritz.step++;
 
-          fs.removeClass('blink_me');
+          //fs.removeClass('blink_me');
+          fs.removeClass('btn-floating');
+          fs.removeClass('btn-pulse');
+
           fe.html(fs.html());
           fs.html('');
           fs.css('background', colors[fritz.step]);
