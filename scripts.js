@@ -17,32 +17,38 @@ var fritz = {
 
 $(function(){
   $(".fritz-cell").click(function(){
-    var id = $(this).attr('id');
-    if (fritz.start === null){
-      fritz.start = id;
-      $(this).addClass('blink_me');
-    } else {
-      fritz.end = id;
-      if (fritz.checkStep())
-      {
-        showToast('Bien!!!');
-
-        var fs = $("#" +  fritz.start);
-        var fe = $("#" +  fritz.end);
-
-        fritz.step++;
-
-        fs.removeClass('blink_me');
-        fe.html(fs.html());
-        fe.css('background', 'green');
-
-        if (fritz.step > solutionData.length) {
-          showToast('Felicitaciones!')
-        }
+    if (fritz.step < solutionData.length) {
+      var id = $(this).attr('id');
+      if (fritz.start === null){
+        fritz.start = id;
+        $(this).addClass('blink_me');
       } else {
-        $("#" +  fritz.start).removeClass('blink_me');
-        showToast('Mal !!');
-        fritz.start = null;
+        fritz.end = id;
+        if (fritz.checkStep())
+        {
+          showToast('Bien!!!');
+
+          var fs = $("#" +  fritz.start);
+          var fe = $("#" +  fritz.end);
+
+          fritz.step++;
+
+          fs.removeClass('blink_me');
+          fe.html(fs.html());
+          fe.css('background', 'green');
+
+          fritz.start = null;
+          fritz.end = null;
+
+          if (fritz.step > solutionData.length) {
+            showToast('Felicitaciones!');
+          }
+
+        } else {
+          $("#" +  fritz.start).removeClass('blink_me');
+          showToast('Mal !!');
+          fritz.start = null;
+        }
       }
     }
   });
