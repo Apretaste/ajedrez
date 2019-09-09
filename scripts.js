@@ -61,12 +61,16 @@ $(function () {
 
           if (fritz.step >= solutionData.length) {
             $('#modal1').modal('open');
-            $('#btnLevelUp').click(function(){
-               if (levelNumber < 3) {
-                 var levels = ['','FACIL','MEDIO','DIFICIL'];
-                 apretaste.send({command: 'AJEDREZ', data: {query: levels[levelNumber+1]}});
-               }
-            });
+            if (levelNumber < 3) {
+              $('#btnLevelUp').click(function(){
+                 //if (levelNumber < 3) {
+                   var levels = ['','FACIL','MEDIO','DIFICIL'];
+                   apretaste.send({command: 'AJEDREZ', data: {query: levels[levelNumber+1]}});
+                 //}
+              });
+            } else {
+              $('#btnLevelUp').hide();
+            }
           }
           else {
             showToast('Bien!!!');
