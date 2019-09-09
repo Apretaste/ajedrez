@@ -93,6 +93,6 @@ $(function () {
 
 function showNextStep() {
   if (fritz.step < solutionData.length) {
-
+    showToast('Siguiente paso: ' + solutionData[fritz.step+1].start + '-' + solutionData[fritz.step+1].end);
   }
 }
