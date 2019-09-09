@@ -30,10 +30,10 @@
 	<ul>
 		<li><a href="#!" class="btn-floating " onclick="showNextStep();"><i class="material-icons left">remove_red_eye</i>Ayuda</a></li>
 		<% if (level !== "Fácil") { %>
-		  <li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: 'FACIL'}});"><i class="material-icons left">looks_1</i>F&aacute;cil</a></li>
+		  <li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: 'FACIL'}});"><i class="material-icons left">looks_one</i>F&aacute;cil</a></li>
 		<% } %>
 		<% if (level !== "Intermedio") { %>
-		  <li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: ''}});"><i class="material-icons left">looks_2</i>Medio</a></li>
+		  <li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: ''}});"><i class="material-icons left">looks_two</i>Medio</a></li>
 		<% } %>
 		<% if (level !== "Difícil") { %>
 			<li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: 'DIFICIL'}});"><i class="material-icons left">looks_3</i>Dif&iacute;cil&eacute;lite</a>
