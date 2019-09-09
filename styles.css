@@ -5,6 +5,9 @@ td, th {
   padding-bottom: 0px;
   min-width: 2.5rem;
 }
+td small, th small {
+  font-size: 1rem;
+}
 
 .blink_me {
   animation: blinker 1s linear infinite;

@@ -53,6 +53,7 @@ class AjedrezService extends ApretasteService
             'solution'     => $puzzle['solution'],
             'solutionData' => $puzzle['solutionData'],
             'level'        => $levelMap[$level],
+            'levelNumber' =>  $level + 1,
             'turnStr'      => $puzzle['turn'] == self::WHITE ? 'blancas' : 'negras'
 
         ];

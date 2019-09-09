@@ -60,7 +60,13 @@ $(function () {
           fritz.end = null;
 
           if (fritz.step >= solutionData.length) {
-            showToast('Terminaste. Felicitaciones!');
+            $('#modal1').modal('open');
+            $('#btnLevelUp').click(function(){
+               if (levelNumber < 3) {
+                 var levels = ['','FACIL','MEDIO','DIFICIL'];
+                 apretaste.send({command: 'AJEDREZ', data: {query: levels[levelNumber+1]}});
+               }
+            });
           }
           else {
             showToast('Bien!!!');
@@ -70,7 +76,7 @@ $(function () {
           //$("#" + fritz.start).removeClass('blink_me');
           fs.removeClass('btn-floating');
           fs.removeClass('pulse');
-          showToast('Mal !!');
+          showToast('Jugada incorrecta.');
           fritz.start = null;
         }
       }
@@ -81,4 +87,12 @@ $(function () {
     direction: 'top',
     hoverEnabled: false
   });
+
+  $('.modal').modal();
 });
+
+function showNextStep() {
+  if (fritz.step < solutionData.length) {
+
+  }
+}

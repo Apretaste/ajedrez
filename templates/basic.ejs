@@ -1,16 +1,12 @@
 <div class="row">
 	<div class="col s12 l6 offset-l3">
-		<h1>Encuentre la mejor jugada.</h1>
+		<h1>Ajedrez.</h1>
 	</div>
 </div>
 
 <div class="row">
 	<div class="col s6 l3 offset-l3">
-		Juegan las <%= turnStr %>. <br/>
-		Nivel <%= level %>.
-	</div>
-	<div id="solution" class="col s6 center l3">
-		<i>toca la ficha y luego la casilla de destino</i>
+		Dificultad <%= levelNumber %>. Juegan las  <%= turnStr %>. Encuentra la mejor jugada.
 	</div>
 </div>
 
@@ -21,24 +17,35 @@
 </div>
 
 <div class="row">
-	<div class="col s12 ">
-
+	<div id="solution" class="col s6 center l3">
+		<i>toca la ficha y luego la casilla de destino</i>
 	</div>
 </div>
+<br/>
 
 <div class="fixed-action-btn">
 	<a class="btn-floating btn-large green">
 		<i class="large material-icons">border_clear</i>
 	</a>
 	<ul>
+		<li><a href="#!" class="btn-floating " onclick="showNextStep();"><i class="material-icons left">remove_red_eye</i>Ayuda</a></li>
 		<% if (level !== "Fácil") { %>
-		  <li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: 'FACIL'}});"><i class="material-icons left">border_horizontal</i>F&aacute;cil</a></li>
+		  <li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: 'FACIL'}});"><i class="material-icons left">looks_1</i>F&aacute;cil</a></li>
 		<% } %>
 		<% if (level !== "Intermedio") { %>
-		  <li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: ''}});"><i class="material-icons left">border_outer</i>Medio</a></li>
+		  <li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: ''}});"><i class="material-icons left">looks_2</i>Medio</a></li>
 		<% } %>
 		<% if (level !== "Difícil") { %>
-			<li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: 'DIFICIL'}});"><i class="material-icons left">border_all</i>Dif&iacute;cil&eacute;lite</a>
+			<li><a href="#!" class="btn-floating " onclick="apretaste.send({command: 'AJEDREZ', data: {query: 'DIFICIL'}});"><i class="material-icons left">looks_3</i>Dif&iacute;cil&eacute;lite</a>
 		<% } %>
 	</ul>
 </div>
+
+ <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Bien hecho!</h4>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="btnLevelUp">Subir de nivel</a>
+    </div>
+  </div>
