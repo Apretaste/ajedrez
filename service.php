@@ -223,6 +223,6 @@ class AjedrezService extends ApretasteService
     protected function numToSq($i)
     {
         $i = (int) $i;
-        return chr(97 + $i % 8).(($i / 8) + 1);
+        return chr(97 + $i % 8).((int)($i / 8) + 1);
     }
 }
