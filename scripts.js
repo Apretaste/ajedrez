@@ -74,6 +74,12 @@ $(function () {
           }
           else {
             showToast('Bien!!!');
+						apretaste.send({
+							command: "AJEDREZ SOLVE",
+							data: {
+							},
+							redirect: false
+						});
           }
         }
         else {
