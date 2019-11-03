@@ -71,15 +71,17 @@ $(function () {
             } else {
               $('#btnLevelUp').hide();
             }
-          }
-          else {
-            showToast('Bien!!!');
+
 						apretaste.send({
 							command: "AJEDREZ SOLVE",
 							data: {
 							},
 							redirect: false
 						});
+          }
+          else {
+            showToast('Bien!!!');
+
           }
         }
         else {
