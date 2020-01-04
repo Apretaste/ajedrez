@@ -1,11 +1,14 @@
 <?php
 
 use GuzzleHttp\Client;
+use Apretaste\Challenges;
+use Apretaste\Request;
+use Apretaste\Response;
 
 /**
  * Retrieves the tactics problem of the day from Shredder website.
  */
-class AjedrezService extends ApretasteService
+class Service
 {
 	const NONE = 0, WHITE = 1, BLACK = -1;
 
@@ -16,14 +19,14 @@ class AjedrezService extends ApretasteService
 	/**
 	 * Function executed when the service is called
 	 */
-	public function _main()
+	public function _main(Request $request, Response &$response)
 	{
 		// Get requested difficulty level
-		if (empty($this->request->input->data->query)) {
+		if (empty($request->input->data->query)) {
 			$level = self::MEDIUM;
-		} elseif (stripos($this->request->input->data->query, 'f') === 0) {
+		} elseif (stripos($request->input->data->query, 'f') === 0) {
 			$level = self::EASY;
-		} elseif (stripos($this->request->input->data->query, 'd') === 0) {
+		} elseif (stripos($request->input->data->query, 'd') === 0) {
 			$level = self::HARD;
 		} else {
 			$level = self::MEDIUM;
@@ -57,22 +60,28 @@ class AjedrezService extends ApretasteService
 
 		];
 
-		$this->response->setCache("day");
-		$this->response->setLayout('ajedrez.ejs');
-		$this->response->setTemplate("basic.ejs", $content);
+		$response->setCache("day");
+		$response->setLayout('ajedrez.ejs');
+		$response->setTemplate("basic.ejs", $content);
 
 		// Cache response
 		$cache = [
 			'date'     => $today,
-			'response' => $this->response
+			'response' => $response
 		];
 
 		file_put_contents(__DIR__."/cache/$level.ser", serialize($cache));
 	}
 
-	public function _solve()
+	/**
+	 * SOLVE subservice
+	 *
+	 * @param \Apretaste\Request  $request
+	 * @param \Apretaste\Response $response
+	 */
+	public function _solve(Request $request, Response &$response)
 	{
-		Challenges::complete("complete-ajedrez", $this->request->person->id);
+		Challenges::complete("complete-ajedrez", $request->person->id);
 	}
 
 	/**
