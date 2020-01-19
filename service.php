@@ -40,9 +40,9 @@ class Service
 		 }
  */
 		$levelMap = [
-			self::EASY   => 'Fácil',
+			self::EASY => 'Fácil',
 			self::MEDIUM => 'Intermedio',
-			self::HARD   => 'Difícil'
+			self::HARD => 'Difícil'
 		];
 
 		$puzzle = $this->fetchPuzzle($level);
@@ -51,12 +51,12 @@ class Service
 		}
 
 		$content = [
-			'board'        => $puzzle['board'],
-			'solution'     => $puzzle['solution'],
+			'board' => $puzzle['board'],
+			'solution' => $puzzle['solution'],
 			'solutionData' => $puzzle['solutionData'],
-			'level'        => $levelMap[$level],
-			'levelNumber' =>  $level + 1,
-			'turnStr'      => $puzzle['turn'] == self::WHITE ? 'blancas' : 'negras'
+			'level' => $levelMap[$level],
+			'levelNumber' => $level + 1,
+			'turnStr' => $puzzle['turn'] == self::WHITE ? 'blancas' : 'negras'
 
 		];
 
@@ -66,7 +66,7 @@ class Service
 
 		// Cache response
 		$cache = [
-			'date'     => $today,
+			'date' => $today,
 			'response' => $response
 		];
 
@@ -76,7 +76,7 @@ class Service
 	/**
 	 * SOLVE subservice
 	 *
-	 * @param \Apretaste\Request  $request
+	 * @param \Apretaste\Request $request
 	 * @param \Apretaste\Response $response
 	 *
 	 * @throws \Framework\Alert
@@ -135,7 +135,7 @@ class Service
 			$solution .= $ss;
 			$puzzle['solutionData'][] = [
 				'start' => $start,
-				'end'   => $end
+				'end' => $end
 			];
 		}
 
@@ -162,9 +162,9 @@ class Service
 	/**
 	 * Returns an HTML representation of the board with the given FEN position
 	 *
-	 * @param string  $fen
+	 * @param string $fen
 	 * @param integer $turn
-	 * @param array   $firstMove
+	 * @param array $firstMove
 	 *
 	 * @return string
 	 */
@@ -236,6 +236,6 @@ class Service
 	protected function numToSq($i)
 	{
 		$i = (int) $i;
-		return chr(97 + $i % 8).((int)($i / 8) + 1);
+		return chr(97 + $i % 8).((int) ($i / 8) + 1);
 	}
 }
