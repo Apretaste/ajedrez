@@ -60,9 +60,9 @@ class Service
 
 		];
 
-		$response->setCache("day");
+		$response->setCache('day');
 		$response->setLayout('ajedrez.ejs');
-		$response->setTemplate("basic.ejs", $content);
+		$response->setTemplate('basic.ejs', $content);
 
 		// Cache response
 		$cache = [
@@ -78,10 +78,12 @@ class Service
 	 *
 	 * @param \Apretaste\Request  $request
 	 * @param \Apretaste\Response $response
+	 *
+	 * @throws \Framework\Alert
 	 */
 	public function _solve(Request $request, Response &$response)
 	{
-		Challenges::complete("complete-ajedrez", $request->person->id);
+		Challenges::complete('complete-ajedrez', $request->person->id);
 	}
 
 	/**
@@ -94,9 +96,8 @@ class Service
 	protected function fetchPuzzle($level)
 	{
 		$client = new Client();
-		$url = "http://www.shredderchess.com/online/playshredder/fetch.php?action=tacticsoftheday&day=0&level=".strval($level);
+		$url = 'http://www.shredderchess.com/online/playshredder/fetch.php?action=tacticsoftheday&day=0&level='.((int) $level);
 		$response = $client->get($url);
-
 		$data = $response->getBody()->__toString();
 
 		if (!$data) {
@@ -170,18 +171,18 @@ class Service
 	private function makeBoardHtml($fen, $turn, $firstMove)
 	{
 		$pieceMap = [
-			'K' => "&#9812;",
-			'Q' => "&#9813;",
-			'R' => "&#9814;",
-			'B' => "&#9815;",
-			'N' => "&#9816;",
-			'P' => "&#9817;",
-			'k' => "&#9818;",
-			'q' => "&#9819;",
-			'r' => "&#9820;",
-			'b' => "&#9821;",
-			'n' => "&#9822;",
-			'p' => "&#9823;"
+			'K' => '&#9812;',
+			'Q' => '&#9813;',
+			'R' => '&#9814;',
+			'B' => '&#9815;',
+			'N' => '&#9816;',
+			'P' => '&#9817;',
+			'k' => '&#9818;',
+			'q' => '&#9819;',
+			'r' => '&#9820;',
+			'b' => '&#9821;',
+			'n' => '&#9822;',
+			'p' => '&#9823;'
 		];
 
 		$board = array_pad([], 64, self::NONE);
