@@ -33,9 +33,9 @@ $(function () {
       }
       else {
         fritz.end = id;
-        var fs = $("#" + fritz.start + " > span");
+        var fs = $("#" + fritz.start);
         if (fritz.checkStep()) {
-          var fe = $("#" + fritz.end + " > span");
+          var fe = $("#" + fritz.end);
 
           fritz.step++;
 
