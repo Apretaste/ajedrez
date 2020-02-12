@@ -16,3 +16,7 @@ td small, th small {
 @keyframes blinker {
   50% { opacity: 0; }
 }
+
+td.fritz-cell{
+	padding:0px;
+}
