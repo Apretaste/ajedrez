@@ -19,7 +19,7 @@ var fritz = {
 };
 
 $(function () {
-  $(".fritz-cell").click(function () {
+  $(".fritz-cell > span").click(function () {
     if (fritz.step < solutionData.length) {
       var id = $(this).attr('id');
       if (fritz.start === null) {
