@@ -34,11 +34,12 @@ class Service
 
 		// Return cached response if fetched today
 		$today = mktime(0, 0, 0);
-		/* $cached = @unserialize(file_get_contents(__DIR__."/cache/$level.ser"));
-		 if ($cached && $cached['date'] == $today) {
-			 return $cached['response'];
-		 }
- */
+		$cacheFile = TEMP_PATH."/cache/ajedrez_$level.ser";
+		$cached = @unserialize(@file_get_contents($cacheFile));
+		if ($cached && $cached['date'] === $today) {
+			return $cached['response'];
+		}
+
 		$levelMap = [
 			self::EASY => 'Fácil',
 			self::MEDIUM => 'Intermedio',
@@ -70,7 +71,7 @@ class Service
 			'response' => $response
 		];
 
-		file_put_contents(__DIR__."/cache/$level.ser", serialize($cache));
+		file_put_contents($cacheFile, serialize($cache));
 	}
 
 	/**
