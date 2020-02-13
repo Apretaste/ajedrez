@@ -35,9 +35,12 @@ class Service
 		// Return cached response if fetched today
 		$today = mktime(0, 0, 0);
 		$cacheFile = TEMP_PATH."/cache/ajedrez_$level.ser";
-		$cached = @unserialize(@file_get_contents($cacheFile));
-		if ($cached && $cached['date'] === $today) {
-			return $cached['response'];
+
+		if (file_exists($cacheFile)) {
+			$cached = @unserialize(@file_get_contents($cacheFile));
+			if ($cached && $cached['date'] === $today) {
+				return $cached['response'];
+			}
 		}
 
 		$levelMap = [
