@@ -36,12 +36,12 @@ class Service
 		$today = mktime(0, 0, 0);
 		$cacheFile = TEMP_PATH."/cache/ajedrez_$level.ser";
 
-		if (file_exists($cacheFile)) {
+		/*if (file_exists($cacheFile)) {
 			$cached = @unserialize(@file_get_contents($cacheFile));
 			if ($cached && $cached['date'] === $today) {
 				return $cached['response'];
 			}
-		}
+		}*/
 
 		$levelMap = [
 			self::EASY => 'Fácil',
