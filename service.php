@@ -1,11 +1,14 @@
 <?php
 
 use GuzzleHttp\Client;
+use Apretaste\Challenges;
+use Apretaste\Request;
+use Apretaste\Response;
 
 /**
  * Retrieves the tactics problem of the day from Shredder website.
  */
-class AjedrezService extends ApretasteService
+class Service
 {
 	const NONE = 0, WHITE = 1, BLACK = -1;
 
@@ -16,14 +19,14 @@ class AjedrezService extends ApretasteService
 	/**
 	 * Function executed when the service is called
 	 */
-	public function _main()
+	public function _main(Request $request, Response &$response)
 	{
 		// Get requested difficulty level
-		if (empty($this->request->input->data->query)) {
+		if (empty($request->input->data->query)) {
 			$level = self::MEDIUM;
-		} elseif (stripos($this->request->input->data->query, 'f') === 0) {
+		} elseif (stripos($request->input->data->query, 'f') === 0) {
 			$level = self::EASY;
-		} elseif (stripos($this->request->input->data->query, 'd') === 0) {
+		} elseif (stripos($request->input->data->query, 'd') === 0) {
 			$level = self::HARD;
 		} else {
 			$level = self::MEDIUM;
@@ -31,15 +34,19 @@ class AjedrezService extends ApretasteService
 
 		// Return cached response if fetched today
 		$today = mktime(0, 0, 0);
-		/* $cached = @unserialize(file_get_contents(__DIR__."/cache/$level.ser"));
-		 if ($cached && $cached['date'] == $today) {
-			 return $cached['response'];
-		 }
- */
+		$cacheFile = TEMP_PATH."/cache/ajedrez_$level.ser";
+
+		/*if (file_exists($cacheFile)) {
+			$cached = @unserialize(@file_get_contents($cacheFile));
+			if ($cached && $cached['date'] === $today) {
+				return $cached['response'];
+			}
+		}*/
+
 		$levelMap = [
-			self::EASY   => 'Fácil',
+			self::EASY => 'Fácil',
 			self::MEDIUM => 'Intermedio',
-			self::HARD   => 'Difícil'
+			self::HARD => 'Difícil'
 		];
 
 		$puzzle = $this->fetchPuzzle($level);
@@ -48,31 +55,39 @@ class AjedrezService extends ApretasteService
 		}
 
 		$content = [
-			'board'        => $puzzle['board'],
-			'solution'     => $puzzle['solution'],
+			'board' => $puzzle['board'],
+			'solution' => $puzzle['solution'],
 			'solutionData' => $puzzle['solutionData'],
-			'level'        => $levelMap[$level],
-			'levelNumber' =>  $level + 1,
-			'turnStr'      => $puzzle['turn'] == self::WHITE ? 'blancas' : 'negras'
+			'level' => $levelMap[$level],
+			'levelNumber' => $level + 1,
+			'turnStr' => $puzzle['turn'] == self::WHITE ? 'blancas' : 'negras'
 
 		];
 
-		$this->response->setCache("day");
-		$this->response->setLayout('ajedrez.ejs');
-		$this->response->setTemplate("basic.ejs", $content);
+		$response->setCache('day');
+		$response->setLayout('ajedrez.ejs');
+		$response->setTemplate('basic.ejs', $content);
 
 		// Cache response
 		$cache = [
-			'date'     => $today,
-			'response' => $this->response
+			'date' => $today,
+			'response' => $response
 		];
 
-		file_put_contents(__DIR__."/cache/$level.ser", serialize($cache));
+		file_put_contents($cacheFile, serialize($cache));
 	}
 
-	public function _solve()
+	/**
+	 * SOLVE subservice
+	 *
+	 * @param \Apretaste\Request $request
+	 * @param \Apretaste\Response $response
+	 *
+	 * @throws \Framework\Alert
+	 */
+	public function _solve(Request $request, Response &$response)
 	{
-		Challenges::complete("complete-ajedrez", $this->request->person->id);
+		Challenges::complete('complete-ajedrez', $request->person->id);
 	}
 
 	/**
@@ -85,9 +100,8 @@ class AjedrezService extends ApretasteService
 	protected function fetchPuzzle($level)
 	{
 		$client = new Client();
-		$url = "http://www.shredderchess.com/online/playshredder/fetch.php?action=tacticsoftheday&day=0&level=".strval($level);
+		$url = 'http://www.shredderchess.com/online/playshredder/fetch.php?action=tacticsoftheday&day=0&level='.((int) $level);
 		$response = $client->get($url);
-
 		$data = $response->getBody()->__toString();
 
 		if (!$data) {
@@ -125,7 +139,7 @@ class AjedrezService extends ApretasteService
 			$solution .= $ss;
 			$puzzle['solutionData'][] = [
 				'start' => $start,
-				'end'   => $end
+				'end' => $end
 			];
 		}
 
@@ -152,27 +166,27 @@ class AjedrezService extends ApretasteService
 	/**
 	 * Returns an HTML representation of the board with the given FEN position
 	 *
-	 * @param string  $fen
+	 * @param string $fen
 	 * @param integer $turn
-	 * @param array   $firstMove
+	 * @param array $firstMove
 	 *
 	 * @return string
 	 */
 	private function makeBoardHtml($fen, $turn, $firstMove)
 	{
 		$pieceMap = [
-			'K' => "&#9812;",
-			'Q' => "&#9813;",
-			'R' => "&#9814;",
-			'B' => "&#9815;",
-			'N' => "&#9816;",
-			'P' => "&#9817;",
-			'k' => "&#9818;",
-			'q' => "&#9819;",
-			'r' => "&#9820;",
-			'b' => "&#9821;",
-			'n' => "&#9822;",
-			'p' => "&#9823;"
+			'K' => '&#9812;',
+			'Q' => '&#9813;',
+			'R' => '&#9814;',
+			'B' => '&#9815;',
+			'N' => '&#9816;',
+			'P' => '&#9817;',
+			'k' => '&#9818;',
+			'q' => '&#9819;',
+			'r' => '&#9820;',
+			'b' => '&#9821;',
+			'n' => '&#9822;',
+			'p' => '&#9823;'
 		];
 
 		$board = array_pad([], 64, self::NONE);
@@ -226,6 +240,6 @@ class AjedrezService extends ApretasteService
 	protected function numToSq($i)
 	{
 		$i = (int) $i;
-		return chr(97 + $i % 8).((int)($i / 8) + 1);
+		return chr(97 + $i % 8).((int) ($i / 8) + 1);
 	}
 }

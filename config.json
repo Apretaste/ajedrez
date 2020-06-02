@@ -1,8 +1,9 @@
 {
 	"name": "ajedrez",
-	"version": "1",
 	"description": "Muestra un nuevo problema de ajedrez cada dia",
 	"category": "ocio",
 	"creator": "kumahacker@gmail.com",
-	"listed": true
+	"listed": true,
+	"guest": true,
+	"caption": "Ajedrez"
 }
