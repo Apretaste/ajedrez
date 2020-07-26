@@ -1,5 +1,6 @@
 <?php
 
+use Apretaste\Level;
 use GuzzleHttp\Client;
 use Apretaste\Challenges;
 use Apretaste\Request;
@@ -88,6 +89,7 @@ class Service
 	public function _solve(Request $request, Response &$response)
 	{
 		Challenges::complete('complete-ajedrez', $request->person->id);
+		Level::setExperience('WIN_AJEDREZ', $request->person->id);
 	}
 
 	/**
