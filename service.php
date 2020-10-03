@@ -1,5 +1,6 @@
 <?php
 
+use Apretaste\Game;
 use Apretaste\Level;
 use GuzzleHttp\Client;
 use Apretaste\Challenges;
