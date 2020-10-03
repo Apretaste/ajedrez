@@ -36,7 +36,7 @@ class Service
 
 		// Return cached response if fetched today
 		$today = mktime(0, 0, 0);
-		$cacheFile = TEMP_PATH."/cache/ajedrez_$level.ser";
+		$cacheFile = TEMP_PATH . "/cache/ajedrez_$level.ser";
 
 		/*if (file_exists($cacheFile)) {
 			$cached = @unserialize(@file_get_contents($cacheFile));
@@ -82,7 +82,6 @@ class Service
 		];
 
 
-
 		$response->setCache('day');
 		$response->setLayout('ajedrez.ejs');
 		$response->setTemplate('basic.ejs', $content);
@@ -106,19 +105,18 @@ class Service
 	 */
 	public function _solve(Request $request, Response &$response)
 	{
-		$matchId = $request->input->data->matchId;
+		$matchId = $request->input->data->matchId ?? null;
 		$personId = $request->person->id;
 
-		// si es participante y si no ha ganado antes esa partida
-		if (Game::checkParticipant($matchId, $personId) && !Game::checkWinner($matchId, $personId)) {
-			Challenges::complete('complete-ajedrez', $request->person->id);
-			Level::setExperience('WIN_AJEDREZ', $request->person->id);
-
-			$matchId = $request->input->data->matchId ?? null;
-			if ($matchId !== null) {
-				Game::finishMatch($matchId, [$request->person->id]);
+		if ($matchId !== null) {
+			// si es participante y si no ha ganado antes esa partida
+			if (Game::checkParticipant($matchId, $personId) && !Game::checkWinner($matchId, $personId)) {
+				Challenges::complete('complete-ajedrez', $personId);
+				Level::setExperience('WIN_AJEDREZ', $personId);
+				Game::finishMatch($matchId, [$personId]);
 			}
 		}
+
 	}
 
 	/**
@@ -131,7 +129,7 @@ class Service
 	protected function fetchPuzzle($level)
 	{
 		$client = new Client();
-		$url = 'http://www.shredderchess.com/online/playshredder/fetch.php?action=tacticsoftheday&day=0&level='.((int) $level);
+		$url = 'http://www.shredderchess.com/online/playshredder/fetch.php?action=tacticsoftheday&day=0&level=' . ((int)$level);
 		$response = $client->get($url);
 		$data = $response->getBody()->__toString();
 
@@ -166,7 +164,7 @@ class Service
 			$arr = explode('-', $moves[$i]);
 			$start = $this->numToSq($arr[0]);
 			$end = $this->numToSq($arr[1]);
-			$ss = $start.'-'.$end.' ';
+			$ss = $start . '-' . $end . ' ';
 			$solution .= $ss;
 			$puzzle['solutionData'][] = [
 				'start' => $start,
@@ -188,7 +186,7 @@ class Service
 	 */
 	protected function getBackupPuzzle($level)
 	{
-		$json = file_get_contents(__DIR__."/backup/$level.ser");
+		$json = file_get_contents(__DIR__ . "/backup/$level.ser");
 		$puzzle = json_decode($json, true);
 
 		return $puzzle;
@@ -254,7 +252,7 @@ class Service
 		$html .= '<tr><td>&nbsp;</td>';
 		for ($i = 0; $i < 8; $i++) {
 			$ii = $turn == self::WHITE ? $i : 7 - $i;
-			$html .= '<td align="center"><small>'.chr(97 + $ii).'</small></td>';
+			$html .= '<td align="center"><small>' . chr(97 + $ii) . '</small></td>';
 		}
 		$html .= '</tr></table>';
 
@@ -270,7 +268,7 @@ class Service
 	 */
 	protected function numToSq($i)
 	{
-		$i = (int) $i;
-		return chr(97 + $i % 8).((int) ($i / 8) + 1);
+		$i = (int)$i;
+		return chr(97 + $i % 8) . ((int)($i / 8) + 1);
 	}
 }
