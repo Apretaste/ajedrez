@@ -75,6 +75,7 @@ $(function () {
 						apretaste.send({
 							command: "AJEDREZ SOLVE",
 							data: {
+							  matchId: $('#matchId').val()
 							},
 							redirect: false
 						});

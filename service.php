@@ -55,15 +55,32 @@ class Service
 			$puzzle = $this->getBackupPuzzle($level);
 		}
 
+		// hash del board
+		$hash = sha1(serialize($puzzle));
+
+		// ver si tiene alguna partida abierta con este board
+		$openMatch = Game::getOpenMatch('ajedrez', $request->person->id, $hash);
+		if ($openMatch === null) {
+			// si no la tiene, registrar la partida
+			$matchId = Game::registerMatch('ajedrez', $hash);
+
+			// agregarlo como participante
+			Game::addParticipant($matchId, $request->person->id);
+		} else {
+			$matchId = $openMatch->id;
+		}
+
 		$content = [
 			'board' => $puzzle['board'],
 			'solution' => $puzzle['solution'],
 			'solutionData' => $puzzle['solutionData'],
 			'level' => $levelMap[$level],
 			'levelNumber' => $level + 1,
-			'turnStr' => $puzzle['turn'] == self::WHITE ? 'blancas' : 'negras'
-
+			'turnStr' => $puzzle['turn'] == self::WHITE ? 'blancas' : 'negras',
+			'matchId' => $matchId
 		];
+
+
 
 		$response->setCache('day');
 		$response->setLayout('ajedrez.ejs');
@@ -90,6 +107,11 @@ class Service
 	{
 		Challenges::complete('complete-ajedrez', $request->person->id);
 		Level::setExperience('WIN_AJEDREZ', $request->person->id);
+
+		$matchId = $request->input->data->matchId ?? null;
+		if ($matchId !== null) {
+			Game::finishMatch($matchId, [$request->person->id]);
+		}
 	}
 
 	/**
