@@ -106,12 +106,18 @@ class Service
 	 */
 	public function _solve(Request $request, Response &$response)
 	{
-		Challenges::complete('complete-ajedrez', $request->person->id);
-		Level::setExperience('WIN_AJEDREZ', $request->person->id);
+		$matchId = $request->input->data->matchId;
+		$personId = $request->person->id;
 
-		$matchId = $request->input->data->matchId ?? null;
-		if ($matchId !== null) {
-			Game::finishMatch($matchId, [$request->person->id]);
+		// si es participante y si no ha ganado antes esa partida
+		if (Game::checkParticipant($matchId, $personId) && !Game::checkWinner($matchId, $personId)) {
+			Challenges::complete('complete-ajedrez', $request->person->id);
+			Level::setExperience('WIN_AJEDREZ', $request->person->id);
+
+			$matchId = $request->input->data->matchId ?? null;
+			if ($matchId !== null) {
+				Game::finishMatch($matchId, [$request->person->id]);
+			}
 		}
 	}
 
